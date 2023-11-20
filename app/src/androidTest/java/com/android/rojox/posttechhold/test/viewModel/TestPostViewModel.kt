@@ -36,16 +36,18 @@ class TestPostViewModel {
 
         //given
         val posts = listOf(TestUtils.DEFAULT_POST)
+        val isOnline = true
+        viewModel.isOnline.value = isOnline
 
         //when
 
-        viewModel.getPosts(false)
-        `when`(repository.getPosts())
+        viewModel.retrievePosts()
+        `when`(repository.getPosts(!isOnline))
             .thenReturn(DataState.success(posts))
         //then
         advanceUntilIdle()
         assert(viewModel.posts.value?.data != null)
-        verify(repository).getPosts()
+        verify(repository).getPosts(!isOnline)
     }
 
     @Test
@@ -53,18 +55,20 @@ class TestPostViewModel {
 
         //given
         val comments = listOf(TestUtils.DEFAULT_COMMENT)
+        val isOnline = true
         val post = TestUtils.DEFAULT_POST
 
         //when
         viewModel.selectedPost.value = post
-        `when`(repository.getComments(post.id))
+        viewModel.isOnline.value = isOnline
+        `when`(repository.getComments(post.id, !isOnline))
             .thenReturn(DataState.success(comments))
-        viewModel.getComments(false)
+        viewModel.retrieveComments()
 
         //then
         advanceUntilIdle()
         assert(viewModel.comments.value?.data != null)
-        verify(repository).getComments(post.id)
+        verify(repository).getComments(post.id, !isOnline)
     }
 
 

@@ -25,15 +25,14 @@ class PostRepositoryTest {
 
 
     @Test
-    fun `should return Post list on empty local Entities and Remote OK`() = runTest {
+    fun `should return Post list on remote`() = runTest {
 
         //given
         val postsResponse = listOf(TestUtils.DEFAULT_POSTS_RESPONSE)
-        whenever(dbClient.getPost()).thenReturn(emptyList())
         whenever(postService.getPosts()).thenReturn(postsResponse)
 
         //when:
-        val post = repository.getPosts()
+        val post = repository.getPosts(false)
 
 
         verify(dbClient).savePosts(any())
@@ -46,14 +45,14 @@ class PostRepositoryTest {
     }
 
     @Test
-    fun `should return Post list on local Entities found`() = runTest {
+    fun `should return Post list on local Entities on cache`() = runTest {
 
         //given
         val entities = listOf(TestUtils.DEFAULT_POST_ENTITY)
         whenever(dbClient.getPost()).thenReturn(entities)
 
         //when:
-        val post = repository.getPosts()
+        val post = repository.getPosts(true)
 
         verify(dbClient, never()).savePosts(any())
         verify(postService, never()).getPosts()
@@ -66,7 +65,7 @@ class PostRepositoryTest {
     }
 
     @Test
-    fun `should return Comment list on empty local Entities and Remote OK`() = runTest {
+    fun `should return Comment list on remote`() = runTest {
 
         //given
         val commentsResponse = listOf(TestUtils.DEFAULT_COMMENT_RESPONSE)
@@ -75,7 +74,7 @@ class PostRepositoryTest {
         whenever(postService.getComments(postId)).thenReturn(commentsResponse)
 
         //when:
-        val post = repository.getComments(postId)
+        val post = repository.getComments(postId, false)
 
 
         verify(dbClient).saveComments(any())
@@ -89,7 +88,7 @@ class PostRepositoryTest {
 
 
     @Test
-    fun `should return Comment list on local Entities found`() = runTest {
+    fun `should return Comment list on local Entities`() = runTest {
 
         //given
         val commentsEntities = listOf(TestUtils.DEFAULT_COMMENT_ENTITY)
@@ -98,7 +97,7 @@ class PostRepositoryTest {
         whenever(postService.getComments(postId)).thenReturn(emptyList())
 
         //when:
-        val post = repository.getComments(postId)
+        val post = repository.getComments(postId, true)
 
 
         verify(dbClient, never()).saveComments(any())

@@ -89,8 +89,7 @@ class PostDetailScreenTest {
 
         val posts = mutableListOf(TestUtils.DEFAULT_POST)
         val comments = mutableListOf(TestUtils.DEFAULT_COMMENT)
-        `when`(viewModel.getPosts(false)).then {  }
-        `when`(viewModel.getComments(false)).then {  }
+        `when`(viewModel.isOnline).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isDataLoading).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isCommentsLoading).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isNewPostBtnEnabled).thenReturn(MutableStateFlow(false))
@@ -100,5 +99,7 @@ class PostDetailScreenTest {
         `when`(viewModel.newPostTitle).thenReturn(MutableStateFlow(""))
         `when`(viewModel.newPostBody).thenReturn(MutableStateFlow(""))
         `when`(viewModel.selectedPost).thenReturn(MutableStateFlow(posts[0]))
+        `when`(viewModel.retrievePosts()).then {  }
+        `when`(viewModel.retrieveComments()).then {  }
     }
 }

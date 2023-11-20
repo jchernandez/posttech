@@ -38,6 +38,7 @@ import com.android.rojox.posttechhold.ui.navigation.NavigationActions
 import com.android.rojox.posttechhold.ui.components.TextField
 import com.android.rojox.posttechhold.utils.ComposableLifecycle
 import com.android.rojox.posttechhold.utils.UiError
+import com.android.rojox.posttechhold.utils.Utils
 import com.android.rojox.posttechhold.utils.observeAsActions
 import com.android.rojox.posttechhold.viewmodel.PostViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -52,7 +53,6 @@ fun ListPostScreen(
     actions: NavigationActions = NavigationActions()
 ) {
 
-
     val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val isLoading by viewModel.isDataLoading.collectAsState()
@@ -64,7 +64,7 @@ fun ListPostScreen(
 
     ComposableLifecycle { _, event ->
         if (event == Lifecycle.Event.ON_CREATE) {
-            viewModel.getPosts(false)
+            viewModel.retrievePosts()
         }
     }
 
@@ -74,7 +74,7 @@ fun ListPostScreen(
                 it.error!!.message,
                 context.getString(R.string.accept)
             ) {
-                viewModel.getPosts(true)
+                viewModel.retrievePosts()
             }
         }
     })
@@ -89,7 +89,6 @@ fun ListPostScreen(
                 context.getString(R.string.accept))
         }
     })
-
 
     if (!sheetState.isVisible) {
         viewModel.resetNewPostData()
@@ -141,7 +140,7 @@ private fun onPostCreated(
     sheetState: ModalBottomSheetState
 ) {
     coroutineScope.launch { sheetState.hide() }
-    viewModel.getPosts(true)
+    viewModel.retrievePosts()
     Toast.makeText(context,
         context.getString(R.string.added), Toast.LENGTH_SHORT).show()
     viewModel.resetNewPostData()
@@ -157,7 +156,7 @@ private fun Content(
     onClickNewPost: () -> Unit
 ) {
 
-    val post by viewModel.posts.collectAsState()
+    val posts by viewModel.posts.collectAsState()
 
     ModalBottomSheetLayout(
         sheetState = sheetState,
@@ -171,8 +170,8 @@ private fun Content(
         Box(modifier = Modifier
             .fillMaxSize()) {
             LazyColumn {
-                if (post?.data != null ) {
-                    items(post!!.data!!) {
+                if (posts?.data != null ) {
+                    items(posts!!.data!!) {
                         PostItem(post = it) {
                             viewModel.selectedPost.value = it
                             onPostSelected()

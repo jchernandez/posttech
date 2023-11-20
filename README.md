@@ -18,7 +18,7 @@ The app allow users to view a list of posts, view details of a specific post, an
 
 - Clone project
 ```
-git clone https://github.com/your-username/your-project.git
+git clone https://github.com/jchernandez/posttech.git
 ```
 - Open Android studio
 - Build/Run project
@@ -45,7 +45,7 @@ git clone https://github.com/your-username/your-project.git
 
 ## Architecture
 
-![alt text](https://github.com/rojoxpress/posttech/blob/master/app_arch.png?raw=true)
+![alt text](https://github.com/jchernandez/posttech/blob/main/resources/app_arch.png?raw=true)
 
 ## Caching
 

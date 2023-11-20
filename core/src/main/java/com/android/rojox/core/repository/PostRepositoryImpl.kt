@@ -1,5 +1,6 @@
 package com.android.rojox.core.repository
 
+import com.android.rojox.core.domain.entity.PostEntity
 import com.android.rojox.core.domain.request.CommentRequest
 import com.android.rojox.core.domain.request.PostRequest
 import com.android.rojox.core.local.db.impl.DbClient
@@ -15,18 +16,16 @@ class PostRepositoryImpl(
     private val dbClient: DbClient
     ): PostRepository {
 
-    override suspend fun getPosts(forceUpdate: Boolean): DataState<List<Post>> {
-
-        var localPosts = if (!forceUpdate) {
-            dbClient.getPost()
-        } else emptyList()
+    override suspend fun getPosts(loadCache: Boolean): DataState<List<Post>> {
 
         return try {
-            if (localPosts.isEmpty()) {
+            val localPosts = if (!loadCache) {
                 val remotePosts = apiClient.getPosts()
                 val postEntities = remotePosts.map { it.toEntity() }
                 dbClient.savePosts(postEntities)
-                localPosts = postEntities
+                postEntities
+            } else  {
+                dbClient.getPost()
             }
             DataState.success(localPosts.map { it.toModel() })
         } catch (e: Exception)  {
@@ -46,18 +45,16 @@ class PostRepositoryImpl(
         }
     }
 
-    override suspend fun getComments(postId: Int,forceUpdate: Boolean): DataState<List<Comment>> {
-
-        var localComments = if (!forceUpdate) {
-            dbClient.getComments(postId)
-        } else emptyList()
+    override suspend fun getComments(postId: Int, loadCache: Boolean): DataState<List<Comment>> {
 
         return try {
-            if (localComments.isEmpty()) {
+            val localComments = if (!loadCache) {
                 val remoteComments = apiClient.getComments(postId)
-                val commentEntities = remoteComments.map { it.toEntity() }
-                dbClient.saveComments(commentEntities)
-                localComments = commentEntities
+                val entities = remoteComments.map { it.toEntity() }
+                dbClient.saveComments(entities)
+                entities
+            } else  {
+                dbClient.getComments(postId)
             }
             DataState.success(localComments.map { it.toModel() })
         } catch (e: Exception)  {

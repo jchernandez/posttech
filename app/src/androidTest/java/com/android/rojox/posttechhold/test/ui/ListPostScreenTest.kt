@@ -1,16 +1,11 @@
 package com.android.rojox.posttechhold.test.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.platform.app.InstrumentationRegistry
 import com.android.rojox.core.model.Comment
 import com.android.rojox.core.model.DataState
 import com.android.rojox.core.model.Post
@@ -130,8 +125,9 @@ class ListPostScreenTest {
     ) {
 
         val posts = mutableListOf<Post>().apply { repeat(size) { add(TestUtils.DEFAULT_POST) } }
-        `when`(viewModel.getPosts(false)).then {  }
-        `when`(viewModel.getComments(false)).then {  }
+        `when`(viewModel.retrievePosts()).then {  }
+        `when`(viewModel.retrieveComments()).then {  }
+        `when`(viewModel.isOnline).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isDataLoading).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isCommentsLoading).thenReturn(MutableStateFlow(false))
         `when`(viewModel.isNewPostBtnEnabled).thenReturn(MutableStateFlow(false))

@@ -19,9 +19,10 @@ abstract class PostViewModel: ViewModel() {
     abstract val isNewPostBtnEnabled: StateFlow<Boolean>
     abstract val isDataLoading: StateFlow<Boolean>
     abstract val isCommentsLoading: StateFlow<Boolean>
+    abstract val isOnline: MutableStateFlow<Boolean>
 
-    abstract fun getPosts(forceUpdate: Boolean)
-    abstract fun getComments(forceUpdate: Boolean)
+    abstract fun retrievePosts()
+    abstract fun retrieveComments()
     abstract fun addNewPost()
     abstract fun resetNewPostData()
 }

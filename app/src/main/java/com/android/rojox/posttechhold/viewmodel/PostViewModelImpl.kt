@@ -35,18 +35,21 @@ class PostViewModelImpl(private val repository: PostRepository): PostViewModel()
         it?.status == DataStatus.LOADING
     }.stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
+    override val isOnline = MutableStateFlow(true)
 
-    override fun getPosts(forceUpdate: Boolean) {
+    override fun retrievePosts() {
         posts.value = DataState()
         viewModelScope.launch {
-            posts.value = repository.getPosts(forceUpdate)
+            posts.value = repository.getPosts(!isOnline.value)
         }
     }
 
-    override fun getComments(forceUpdate: Boolean) {
+    override fun retrieveComments() {
         comments.value = DataState()
         viewModelScope.launch {
-            comments.value = repository.getComments(selectedPost.value!!.id)
+            comments.value = repository.getComments(
+                selectedPost.value!!.id, !isOnline.value
+            )
         }
     }
 

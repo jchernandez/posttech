@@ -35,7 +35,7 @@ fun PostDetailScreen(viewModel: PostViewModel, actions: NavigationActions = Navi
 
     ComposableLifecycle { _, event ->
         if (event == Lifecycle.Event.ON_CREATE) {
-            viewModel.getComments(false)
+            viewModel.retrieveComments()
         }
     }
 
@@ -47,7 +47,7 @@ fun PostDetailScreen(viewModel: PostViewModel, actions: NavigationActions = Navi
         mutableStateOf(null)
     }
 
-    viewModel.comments.observeAsActions(onEach = {
+    viewModel.posts.observeAsActions(onEach = {
         if (it?.status == DataStatus.ERROR) {
             uiError = UiError(
                 it.error!!.message,
