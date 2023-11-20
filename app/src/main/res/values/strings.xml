@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">PostTechHold</string>
+    <string name="loading">Loading</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="add_post">Add Post</string>
+    <string name="new_post">New Post</string>
+    <string name="accept">Ok</string>
+    <string name="retry">Retry</string>
+    <string name="added">Added</string>
+    <string name="back">Back</string>
+</resources>

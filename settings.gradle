@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        maven {
+            url = "https://maven.pkg.jetbrains.space/public/p/ktor/maven"
+        }
+        maven { url "https://kotlin.bintray.com/kotlinx" }
+    }
+}
+rootProject.name = "PostTechHold"
+include ':app'
+include ':core'
